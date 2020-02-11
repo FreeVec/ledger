@@ -114,5 +114,3 @@ configure_vendor_targets()
 # ------------------------------------------------------------------------------
 
 configure_library_targets()
-
-add_subdirectory(apps)

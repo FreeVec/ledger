@@ -14,7 +14,4 @@ setup_compiler()
 # Benchmark Targets
 # ------------------------------------------------------------------------------
 
-add_executable(serialisation serialisation/main.cpp)
-target_link_libraries(serialisation PRIVATE fetch-core fetch-testing)
-
 add_fetch_gbench(core-random-benches fetch-core random/)

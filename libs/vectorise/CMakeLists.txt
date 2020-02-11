@@ -15,7 +15,7 @@ setup_compiler()
 # ------------------------------------------------------------------------------
 
 setup_library(fetch-vectorise)
-target_link_libraries(fetch-vectorise PUBLIC fetch-meta pthread)
+target_link_libraries(fetch-vectorise PUBLIC fetch-meta fetch-math pthread)
 
 # Define all the test targets
 add_test_target()

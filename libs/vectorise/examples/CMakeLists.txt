@@ -10,4 +10,4 @@ include(${FETCH_ROOT_CMAKE_DIR}/BuildTools.cmake)
 # Compiler Configuration
 setup_compiler()
 
-setup_library_examples(fetch-ledger)
+setup_library_examples(fetch-math)

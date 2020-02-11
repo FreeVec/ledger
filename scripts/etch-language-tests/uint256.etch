@@ -1,8 +1,0 @@
-function main()
-
-   var uint256 = UInt256(100u64);
-
-   var expected_hex_str_in_big_endian_repr = "0000000000000000000000000000000000000000000000000000000000000064";
-   assert(toString(uint256) == expected_hex_str_in_big_endian_repr);
-
-endfunction

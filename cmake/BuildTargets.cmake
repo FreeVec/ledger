@@ -241,53 +241,8 @@ function (configure_vendor_targets)
     enable_testing()
   endif (FETCH_ENABLE_TESTS)
 
-  # memu vendor library
-  add_library(vendor-memu INTERFACE)
-  target_include_directories(vendor-memu INTERFACE ${FETCH_ROOT_VENDOR_DIR}/memu)
-
-  # asio vendor library
-  add_library(vendor-asio INTERFACE)
-  target_include_directories(vendor-asio INTERFACE ${FETCH_ROOT_VENDOR_DIR}/asio/asio/include)
-  target_compile_definitions(vendor-asio
-                             INTERFACE
-                             ASIO_STANDALONE
-                             ASIO_HEADER_ONLY
-                             ASIO_HAS_STD_SYSTEM_ERROR)
-
-  # required for latest version of Xcode: Apple LLVM version 10.0.1 (clang-1001.0.46.3). In this
-  # version the string view has been removed from: <experimental/string_view>. This will need to be
-  # set across all compilers when C++17 support is standard.
-  if (APPLE)
-    target_compile_definitions(vendor-asio INTERFACE ASIO_HAS_STD_STRING_VIEW)
-  endif (APPLE)
-
-  # Local version of OpenSSL
-  add_subdirectory(${FETCH_ROOT_VENDOR_DIR}/openssl)
-  add_library(vendor-openssl INTERFACE)
-  message(STATUS "OpenSSL include ${CMAKE_BINARY_DIR}/vendor/openssl/include")
-  target_link_libraries(vendor-openssl INTERFACE ssl crypto)
-  target_include_directories(vendor-openssl INTERFACE ${CMAKE_BINARY_DIR}/vendor/openssl/include)
-
-  # Pybind11
-  add_subdirectory(${FETCH_ROOT_VENDOR_DIR}/pybind11)
-
   # Google Test
   add_subdirectory(${FETCH_ROOT_VENDOR_DIR}/googletest)
-
-  # MCL TODO: Work out how to get this to work with the already found version of OpenSSL
-  set(USE_GMP OFF CACHE BOOL "use gmp" FORCE)
-  set(USE_OPENSSL OFF CACHE BOOL "use openssl" FORCE)
-  set(ONLY_LIB ON CACHE BOOL "only lib" FORCE)
-  add_subdirectory(${FETCH_ROOT_VENDOR_DIR}/mcl)
-  target_include_directories(mcl_st INTERFACE ${FETCH_ROOT_VENDOR_DIR}/mcl/include)
-  target_compile_definitions(mcl_st
-                             INTERFACE
-                             -DMCL_USE_VINT
-                             -DMCL_VINT_FIXED_BUFFER
-                             -DMCLBN_FP_UNIT_SIZE=4)
-
-  add_library(vendor-mcl INTERFACE)
-  target_link_libraries(vendor-mcl INTERFACE mcl_st)
 
   # Google Benchmark Do not build the google benchmark library tests
   if (FETCH_ENABLE_BENCHMARKS)
@@ -295,36 +250,13 @@ function (configure_vendor_targets)
     add_subdirectory(${FETCH_ROOT_VENDOR_DIR}/benchmark)
   endif (FETCH_ENABLE_BENCHMARKS)
 
-  # mio vendor library
-  add_library(vendor-mio INTERFACE)
-  target_include_directories(vendor-mio INTERFACE ${FETCH_ROOT_VENDOR_DIR}/mio/include)
-
   # backtrace stack vendor library
   add_library(vendor-backward-cpp INTERFACE)
   target_include_directories(vendor-backward-cpp INTERFACE ${FETCH_ROOT_VENDOR_DIR}/backward-cpp/)
 
-  # MsgPack
-  add_library(vendor-msgpack INTERFACE)
-  target_include_directories(vendor-msgpack INTERFACE ${FETCH_ROOT_VENDOR_DIR}/msgpack/include)
-  target_compile_definitions(vendor-msgpack INTERFACE -DMSGPACK_CXX11=ON)
-
   # Spdlog
   add_library(vendor-spdlog INTERFACE)
   target_include_directories(vendor-spdlog INTERFACE ${FETCH_ROOT_VENDOR_DIR}/spdlog/include)
-
-  # utfcpp
-  set(UTF8_TESTS OFF CACHE BOOL "Enable tests for UTF8-CPP" FORCE)
-  set(UTF8_INSTALL OFF CACHE BOOL "Enable installation for UTF8-CPP" FORCE)
-  set(UTF8_SAMPLES OFF CACHE BOOL "Enable building samples for UTF8-CPP" FORCE)
-  add_subdirectory(${FETCH_ROOT_VENDOR_DIR}/utfcpp)
-
-  # noisec
-  set(USE_SODIUM OFF CACHE BOOL "Use Libsodium for crypto" FORCE)
-  set(EXTERNAL_OPENSSL vendor-openssl CACHE STRING "Use vendor-openssl in NoiseC" FORCE)
-  add_subdirectory(${FETCH_ROOT_VENDOR_DIR}/noisec)
-  add_library(vendor-noisec INTERFACE)
-  target_link_libraries(vendor-noisec INTERFACE noise_protocol)
-  target_include_directories(vendor-noisec INTERFACE ${FETCH_ROOT_VENDOR_DIR}/noisec/include)
 
 endfunction (configure_vendor_targets)
 

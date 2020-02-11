@@ -17,9 +17,7 @@ setup_compiler()
 setup_library(fetch-core)
 target_link_libraries(fetch-core
                       PUBLIC fetch-vectorise
-                             fetch-logging
-                             fetch-telemetry
-                             fetch-moment)
+                             fetch-logging)
 
 # ------------------------------------------------------------------------------
 # Example Targets
