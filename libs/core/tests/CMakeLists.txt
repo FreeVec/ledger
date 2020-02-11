@@ -11,4 +11,3 @@ include(${FETCH_ROOT_CMAKE_DIR}/BuildTools.cmake)
 setup_compiler()
 
 fetch_add_test(core-unit-tests fetch-core unit/)
-fetch_add_integration_test(core-integration-tests fetch-core integration/)
