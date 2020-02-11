@@ -1,6 +1,6 @@
-# Ledger
+# Ledger math library
 
-Welcome to Fetch.AI ledger repository. We are building the digital world for today, and the future.
+This is a fork of the Fetch.AI Ledger math library. Original repository here: https://github.com/fetchai/ledger
 
 ## License
 
@@ -17,59 +17,4 @@ for any damages whatsoever, even if it had been advised of the possibility of da
 As such this codebase should be treated as experimental and does not contain all currently developed
 features. Fetch.AI will be delivering regular updates.
 
-## Resources
 
-1. [Website](https://fetch.ai/)
-2. [Blog](https://fetch.ai/blog)
-3. [Community Website](https://community.fetch.ai/)
-4. [Community Telegram Group](https://t.me/fetch_ai)
-5. [Whitepapers](https://fetch.ai/press-partners-publications/#publications)
-6. [Roadmap](https://fetch.ai/fetch-ais-2019-technical-roadmap/)
-
-
-## Supported platforms
-
-* MacOS Darwin 10.13x and higher (64bit)
-* Ubuntu 18.04 (x86_64)
-
-(We plan to support all major platforms in the future).
-
-## Getting Started
-
-```
-git clone https://github.com/fetchai/ledger.git
-cd ledger
-./scripts/quickstart.sh
-```
-
-Or follow our online documentation at [building the ledger](http://docs.fetch.ai/getting-started/installation-mac/).
-
-## Connecting to a test network
-
-Navigate to the constellation application folder:
-
-```
-cd build/apps/constellation
-```
-
-Optionally delete the database files (in the case where you have been running a local network):
-
-```
-rm -f *.db
-```
-
-Connect to the `alpha` test network:
-
-```
-git checkout release/v0.7.x
-./scripts/quickstart.sh
-./constellation -bootstrap -network alpha
-```
-
-## Running the ledger locally
-
-Alternatively, you can run the ledger locally (1 second block interval in this case):
-
-```
-./constellation -standalone -block-interval 1000
-```
