@@ -10,7 +10,7 @@ endmacro (fetch_warning message)
 
 macro (setup_compiler)
 
-  set(CMAKE_CXX_STANDARD 14)
+  set(CMAKE_CXX_STANDARD 17)
   set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
   set(_is_clang_compiler FALSE)
