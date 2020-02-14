@@ -17,7 +17,6 @@
 //
 //------------------------------------------------------------------------------
 
-#include "core/byte_array/byte_array.hpp"
 #include "math/tensor/tensor_declaration.hpp"
 #include "meta/type_traits.hpp"
 #include "vectorise/fixed_point/type_traits.hpp"

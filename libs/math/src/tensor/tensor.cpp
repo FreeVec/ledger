@@ -16,8 +16,6 @@
 //
 //------------------------------------------------------------------------------
 
-#include "core/byte_array/const_byte_array.hpp"
-#include "core/byte_array/consumers.hpp"
 #include "math/base_types.hpp"
 #include "math/matrix_operations.hpp"
 #include "math/standard_functions/abs.hpp"
@@ -25,6 +23,8 @@
 #include "math/tensor/tensor_broadcast.hpp"
 #include "vectorise/fixed_point/fixed_point.hpp"
 #include "vectorise/memory/array.hpp"
+
+#include <charconv>
 
 namespace fetch {
 namespace math {
@@ -685,160 +685,86 @@ SizeType Tensor<T, C>::ComputeIndex(SizeVector const &indices) const
  * @return Return Tensor with the specified values
  */
 template <typename T, typename C>
-Tensor<T, C> Tensor<T, C>::FromString(byte_array::ConstByteArray const &c)
+Tensor<T, C> Tensor<T, C>::FromString(std::string const &c)
 {
-  Tensor            ret;
-  SizeType          n = 0;
-  std::vector<Type> elems;
-  elems.reserve(1024);
-  bool failed         = false;
-  bool prev_backslash = false;
-  enum
-  {
-    UNSET,
-    SEMICOLON,
-    NEWLINE
-  } new_row_marker                = UNSET;
-  bool        reached_actual_data = false;
-  std::size_t first_row_size      = 0;
-  std::size_t current_row_size    = 0;
+  // First trim the string left and right.
+  std::string s{c};
+  s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](int ch) {
+        return !std::isspace(ch);
+  }));
+  s.erase(std::find_if(s.rbegin(), s.rend(), [](int ch) {
+        return !std::isspace(ch);
+  }).base(), s.end());
 
-  // Text parsing loop
-  for (SizeType i = 0; i < c.size();)
+  size_t start;
+  size_t end = 0;
+  std::string line_delim = ";\n\r";
+  if ((end = s.find_first_of(line_delim, 0)) != std::string::npos)
   {
-    SizeType last = i;
-    switch (c[i])
+    line_delim = s[end];
+  }
+
+  Tensor   ret;
+  SizeType rows = 0;
+  SizeType cols = 0;
+  end = 0;
+  // First split the lines
+  std::vector<std::string> lines;
+  while ((start = s.find_first_not_of(line_delim, end)) != std::string::npos)
+  {
+    end = s.find_first_of(line_delim, start);
+    // Trim line before
+    std::string line(s.substr(start, end - start));
+    line.erase(line.begin(), std::find_if(line.begin(), line.end(), [](int ch) {
+        return !std::isspace(ch);
+    }));
+    line.erase(std::find_if(line.rbegin(), line.rend(), [](int ch) {
+        return !std::isspace(ch);
+    }).base(), line.end());
+    lines.emplace_back(line);
+  }
+
+  rows = lines.size();
+  size_t i = 0;
+  std::string col_delim = " ,\t";
+  for (auto line: lines)
+  {
+    size_t start;
+    size_t end = 0;
+    std::vector<std::string> elements;
+    while ((start = line.find_first_not_of(" ,\t", end)) != std::string::npos)
     {
-    case ';':
-      if (reached_actual_data)
-      {
-        if (new_row_marker == UNSET)
-        {
-          new_row_marker = SEMICOLON;
-          // The size of the first row is the size of the vector so far
-          first_row_size = elems.size();
-        }
-        if (new_row_marker == SEMICOLON)
-        {
-          if ((i < c.size() - 1))
-          {
-            reached_actual_data = false;
-            if (current_row_size != first_row_size)
-            {
-              // size is not a multiple of first_row_size
-              std::stringstream s;
-              s << "Invalid shape: row " << n << " has " << current_row_size
-                << " elements, should have " << first_row_size;
-              throw exceptions::WrongShape(s.str());
-            }
-          }
-        }
-      }
-      ++i;
-      break;
-    case 'r':
-    case 'n':
-      if (!prev_backslash)
-      {
-        break;
-      }
-      prev_backslash = false;
-      FETCH_FALLTHROUGH;  // explicit fallthrough to the next case
-    case '\r':
-    case '\n':
-      if (reached_actual_data)
-      {
-        if (new_row_marker == UNSET)
-        {
-          new_row_marker = NEWLINE;
-          // The size of the first row is the size of the vector so far
-          first_row_size = elems.size();
-        }
-        if (new_row_marker == NEWLINE)
-        {
-          if ((i < c.size() - 1))
-          {
-            reached_actual_data = false;
-            if (current_row_size != first_row_size)
-            {
-              // size is not a multiple of first_row_size
-              std::stringstream s;
-              s << "Invalid shape: row " << n << " has " << current_row_size
-                << " elements, should have " << first_row_size;
-              throw exceptions::WrongShape(s.str());
-            }
-          }
-        }
-      }
-      ++i;
-      break;
-    case '\\':
-      prev_backslash = true;
-      ++i;
-      break;
-    case ',':
-    case ' ':
-    case '+':
-    case '\t':
-      prev_backslash = false;
-      ++i;
-      break;
-    default:
-      if (byte_array::consumers::NumberConsumer<1, 2>(c, i) == -1)
-      {
-        throw exceptions::InvalidNumericCharacter("invalid character used in string to set tensor");
-      }
-      else
-      {
-        std::string cur_elem((c.char_pointer() + last), static_cast<std::size_t>(i - last));
-        elems.emplace_back(fetch::math::Type<Type>(cur_elem));
-        prev_backslash = false;
-        if (!reached_actual_data)
-        {
-          // Where we actually start counting rows
-          ++n;
-          reached_actual_data = true;
-          current_row_size    = 0;
-        }
-        current_row_size++;
-      }
-      break;
+      end = line.find_first_of(" ,\t", start);
+      elements.emplace_back(line.substr(start, end - start));
     }
-  }
-  // Check last line parsed also
-  if ((first_row_size > 0) && (current_row_size != first_row_size))
-  {
-    // size is not a multiple of first_row_size
-    std::stringstream s;
-    s << "Invalid shape: row " << n << " has " << current_row_size << " elements, should have "
-      << first_row_size;
-    throw exceptions::WrongShape(s.str());
-  }
-
-  if (n == 0)
-  {
-    throw exceptions::WrongShape("Shape cannot contain zeroes");
-  }
-
-  SizeType m = elems.size() / n;
-
-  if ((m * n) != elems.size())
-  {
-    failed = true;
-  }
-
-  if (!failed)
-  {
-    ret.Resize({n, m});
-
-    SizeType k = 0;
-    for (SizeType i = 0; i < n; ++i)
+    if (cols == 0)
     {
-      for (SizeType j = 0; j < m; ++j)
-      {
-        ret(i, j) = elems[k++];
-      }
+      cols = elements.size();
+      ret.Resize({rows, cols});
     }
+    else if (elements.size() != cols)
+    {
+      std::stringstream s;
+      s << "Invalid shape: row " << i << " has " << elements.size()
+        << " elements, should have " << cols;
+      throw exceptions::WrongShape(s.str());
+    }
+    size_t j = 0;
+    for (auto element: elements)
+    {
+      try
+      {
+        ret(i, j) = fetch::math::Type<Type>(element);
+      }
+      catch(std::exception &e)
+      {
+        std::stringstream s;
+        s << "Invalid character used in element " << element;
+        throw exceptions::InvalidNumericCharacter(s.str());
+      }
+      ++j;
+    }
+    ++i;
   }
 
   return ret;

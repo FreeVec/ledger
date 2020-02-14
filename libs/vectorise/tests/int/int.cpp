@@ -16,7 +16,6 @@
 //
 //------------------------------------------------------------------------------
 
-#include "core/byte_array/encoders.hpp"
 #include "vectorise/uint/int.hpp"
 
 #include "gmock/gmock.h"

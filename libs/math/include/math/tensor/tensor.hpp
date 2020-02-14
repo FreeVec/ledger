@@ -98,7 +98,7 @@ public:
   //    data_ = container_data;
   //  }
 
-  static Tensor FromString(byte_array::ConstByteArray const &c);
+  static Tensor FromString(std::string const &c);
   explicit Tensor(SizeType const &n);
   Tensor(Tensor &&other) noexcept = default;
   Tensor(Tensor const &other)     = default;
