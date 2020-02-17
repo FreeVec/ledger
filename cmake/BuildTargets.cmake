@@ -57,7 +57,6 @@ macro (setup_compiler)
   endif ()
 
   # correct update the flags with the target architecture
-  set(_compiler_arch "sse3")
   if (FETCH_ARCH_SSE3)
     set(_compiler_arch "sse3")
   elseif (FETCH_ARCH_SSE42)
