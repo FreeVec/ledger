@@ -57,20 +57,12 @@ macro (setup_compiler)
   endif ()
 
   # correct update the flags with the target architecture
-  if (FETCH_ARCH_SSE3)
-    set(_compiler_arch "sse3")
-  elseif (FETCH_ARCH_SSE42)
-    set(_compiler_arch "sse4.2")
-  elseif (FETCH_ARCH_AVX)
-    set(_compiler_arch "avx")
-  elseif (FETCH_ARCH_FMA)
-    set(_compiler_arch "fma")
-  elseif (FETCH_ARCH_AVX2)
-    set(_compiler_arch "avx2")
+  if (FETCH_ARCH_AVX2)
+    set(_compiler_arch "-mavx2")
   endif ()
 
   # update actual compiler configuration
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m${_compiler_arch}")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${_compiler_arch}")
 
   # warnings
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wconversion -Wpedantic")
