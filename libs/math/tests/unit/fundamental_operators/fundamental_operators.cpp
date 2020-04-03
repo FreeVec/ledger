@@ -16,7 +16,7 @@
 //
 //------------------------------------------------------------------------------
 
-#include "core/random/lcg.hpp"
+#include "math/random/lcg.hpp"
 #include "math/base_types.hpp"
 #include "math/fundamental_operators.hpp"
 #include "math/tensor/tensor.hpp"

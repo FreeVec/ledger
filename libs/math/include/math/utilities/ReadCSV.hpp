@@ -17,7 +17,7 @@
 //
 //------------------------------------------------------------------------------
 
-#include "core/random.hpp"
+#include "math/random.hpp"
 #include "math/base_types.hpp"
 #include "math/tensor/tensor.hpp"
 

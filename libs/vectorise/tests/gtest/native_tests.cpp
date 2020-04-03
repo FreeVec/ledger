@@ -16,7 +16,7 @@
 //
 //------------------------------------------------------------------------------
 
-#include "core/random/lfg.hpp"
+#include "math/random/lfg.hpp"
 #include "vectorise/register.hpp"
 
 #include "gtest/gtest.h"

@@ -17,7 +17,7 @@
 //
 //------------------------------------------------------------------------------
 
-#include "core/random/lfg.hpp"
+#include "math/random/lfg.hpp"
 
 #include <vector>
 

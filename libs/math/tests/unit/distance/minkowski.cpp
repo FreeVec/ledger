@@ -16,7 +16,7 @@
 //
 //------------------------------------------------------------------------------
 
-#include "core/random/lcg.hpp"
+#include "math/random/lcg.hpp"
 #include "math/distance/euclidean.hpp"
 #include "math/distance/manhattan.hpp"
 #include "math/distance/minkowski.hpp"

@@ -17,7 +17,7 @@
 //
 //------------------------------------------------------------------------------
 
-#include "core/random.hpp"
+#include "math/random.hpp"
 #include "math/distance/euclidean.hpp"
 #include "math/standard_functions/pow.hpp"
 #include "math/tensor/tensor.hpp"

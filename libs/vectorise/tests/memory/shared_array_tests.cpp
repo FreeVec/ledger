@@ -16,7 +16,7 @@
 //
 //------------------------------------------------------------------------------
 
-#include "core/random/lcg.hpp"
+#include "math/random/lcg.hpp"
 #include "vectorise/memory/shared_array.hpp"
 
 #include "gtest/gtest.h"

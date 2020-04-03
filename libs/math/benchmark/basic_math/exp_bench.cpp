@@ -16,7 +16,7 @@
 //
 //------------------------------------------------------------------------------
 
-#include "core/random/lcg.hpp"
+#include "math/random/lcg.hpp"
 #include "math/approx_exp.hpp"
 #include "math/base_types.hpp"
 #include "math/standard_functions/exp.hpp"

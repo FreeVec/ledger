@@ -16,7 +16,7 @@
 //
 //------------------------------------------------------------------------------
 
-#include "core/random/lcg.hpp"
+#include "math/random/lcg.hpp"
 #include "gtest/gtest.h"
 #include "math/distance/manhattan.hpp"
 #include "test_types.hpp"

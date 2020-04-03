@@ -16,7 +16,7 @@
 //
 //------------------------------------------------------------------------------
 
-#include "core/random/lcg.hpp"
+#include "math/random/lcg.hpp"
 #include "math/approx_exp.hpp"
 #include "vectorise/fixed_point/fixed_point.hpp"
 

@@ -16,11 +16,6 @@ setup_compiler()
 
 setup_library(fetch-core)
 target_link_libraries(fetch-core
-                      PUBLIC fetch-vectorise
-                             fetch-logging)
+	INTERFACE fetch-vectorise fetch-logging )
 
-# ------------------------------------------------------------------------------
-# Test Targets
-# ------------------------------------------------------------------------------
 
-add_test_target()

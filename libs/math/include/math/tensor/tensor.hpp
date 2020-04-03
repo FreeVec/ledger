@@ -18,7 +18,7 @@
 //------------------------------------------------------------------------------
 
 #include "core/macros.hpp"
-#include "core/random.hpp"
+#include "math/random.hpp"
 #include "math/exceptions/exceptions.hpp"
 #include "math/fundamental_operators.hpp"
 #include "math/matrix_operations.hpp"

@@ -16,21 +16,12 @@
 //
 //------------------------------------------------------------------------------
 
-#include "bit_statistics.hpp"
-#include "core/random/lfg.hpp"
+#include "math/random.hpp"
 
-#include "gtest/gtest.h"
+namespace fetch {
+namespace random {
 
-#include <iostream>
+LaggedFibonacciGenerator<> Random::generator = LaggedFibonacciGenerator<>();
 
-TEST(lfg_gtest, basic_test)
-{
-  BitStatistics<> bst;
-
-  ASSERT_TRUE(bst.TestAccuracy(1000000, 0.002));
-  for (auto &a : bst.GetProbabilities())
-  {
-    std::cout << a << " ";
-  }
-  std::cout << std::endl;
-}
+}  // namespace random
+}  // namespace fetch
